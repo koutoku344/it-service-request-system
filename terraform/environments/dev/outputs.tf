@@ -22,3 +22,23 @@ output "ec2_security_group_id" {
   description = "ID of the dev EC2 security group"
   value       = module.network.ec2_security_group_id
 }
+
+output "ec2_instance_id" {
+  description = "Application EC2 instance ID"
+  value       = module.ec2.instance_id
+}
+
+output "ec2_private_ip" {
+  description = "Application EC2 private IPv4 address"
+  value       = module.ec2.private_ip
+}
+
+output "ec2_public_ip" {
+  description = "Application EC2 public IPv4 address"
+  value       = module.ec2.public_ip
+}
+
+output "ec2_public_dns" {
+  description = "Application EC2 public DNS name"
+  value       = module.ec2.public_dns
+}
