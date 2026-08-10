@@ -2,18 +2,21 @@ from fastapi import FastAPI
 from sqlalchemy import text
 
 from app.database import engine
-from app.routers import requests
 
+from app.routers import approvals, requests
 
 app = FastAPI(
     title="IT Service Request System API",
-    version="0.2.0",
+    version="0.3.0",
 )
 
 app.include_router(
     requests.router,
 )
 
+app.include_router(
+    approvals.router,
+)
 
 @app.get("/")
 def root():

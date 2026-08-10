@@ -33,3 +33,26 @@ class RequestResponse(BaseModel):
     status: str
     created_at: datetime
     updated_at: datetime
+
+
+class ApprovalAction(BaseModel):
+    approver_name: str = Field(
+        min_length=1,
+        max_length=100,
+    )
+
+    comment: str | None = Field(
+        default=None,
+        max_length=1000,
+    )
+
+
+class ApprovalHistoryResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    request_id: int
+    action: str
+    comment: str | None
+    approver_name: str
+    created_at: datetime
