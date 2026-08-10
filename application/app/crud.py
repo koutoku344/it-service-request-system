@@ -60,3 +60,41 @@ def cancel_request(
     db.refresh(db_request)
 
     return db_request
+
+
+def update_request_status(
+    db: Session,
+    db_request: models.Request,
+    new_status: str,
+    approver_name: str,
+    comment: str | None,
+) -> models.Request:
+
+    db_request.status = new_status
+
+    history = models.ApprovalHistory(
+        request_id=db_request.id,
+        action=new_status,
+        comment=comment,
+        approver_name=approver_name,
+    )
+
+    db.add(history)
+    db.commit()
+    db.refresh(db_request)
+
+    return db_request
+
+
+def get_approval_histories(
+    db: Session,
+    request_id: int,
+) -> list[models.ApprovalHistory]:
+
+    statement = (
+        select(models.ApprovalHistory)
+        .where(models.ApprovalHistory.request_id == request_id)
+        .order_by(models.ApprovalHistory.id.asc())
+    )
+
+    return list(db.scalars(statement).all())
