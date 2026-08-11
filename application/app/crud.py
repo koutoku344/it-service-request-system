@@ -7,13 +7,14 @@ from app import models, schemas
 def create_request(
     db: Session,
     request_data: schemas.RequestCreate,
+    applicant_name: str,
 ) -> models.Request:
 
     db_request = models.Request(
         request_type=request_data.request_type,
         title=request_data.title,
         description=request_data.description,
-        applicant_name=request_data.applicant_name,
+        applicant_name=applicant_name,
         status="pending",
     )
 
@@ -98,3 +99,19 @@ def get_approval_histories(
     )
 
     return list(db.scalars(statement).all())
+
+def get_user_by_username(
+    db: Session,
+    username: str,
+) -> models.User | None:
+    statement = select(models.User).where(
+        models.User.username == username
+    )
+    return db.scalar(statement)
+
+
+def get_users(db: Session) -> list[models.User]:
+    statement = select(models.User).order_by(models.User.id.asc())
+    return list(db.scalars(statement).all())
+
+

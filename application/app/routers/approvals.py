@@ -3,6 +3,8 @@ from sqlalchemy.orm import Session
 
 from app import crud, schemas
 from app.database import get_db
+from app import models
+from app.auth import require_roles
 
 
 router = APIRouter(
@@ -40,6 +42,9 @@ def approve_request(
     request_id: int,
     action_data: schemas.ApprovalAction,
     db: Session = Depends(get_db),
+    current_user: models.User = Depends(
+        require_roles("approver", "admin")
+        )
 ):
     db_request = get_pending_request_or_404(request_id, db)
 
@@ -47,7 +52,7 @@ def approve_request(
         db=db,
         db_request=db_request,
         new_status="approved",
-        approver_name=action_data.approver_name,
+        approver_name=current_user.username,
         comment=action_data.comment,
     )
 
@@ -60,6 +65,9 @@ def reject_request(
     request_id: int,
     action_data: schemas.ApprovalAction,
     db: Session = Depends(get_db),
+    current_user: models.User = Depends(
+        require_roles("approver", "admin")
+        )
 ):
     db_request = get_pending_request_or_404(request_id, db)
 
@@ -67,7 +75,7 @@ def reject_request(
         db=db,
         db_request=db_request,
         new_status="rejected",
-        approver_name=action_data.approver_name,
+        approver_name=current_user.username,
         comment=action_data.comment,
     )
 
