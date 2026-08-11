@@ -43,3 +43,9 @@ variable "common_tags" {
   description = "Common tags applied to resources"
   type        = map(string)
 }
+
+variable "iam_instance_profile" {
+  description = "IAM instance profile name attached to EC2"
+  type        = string
+  default     = null
+}
