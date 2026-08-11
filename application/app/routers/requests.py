@@ -3,7 +3,8 @@ from sqlalchemy.orm import Session
 
 from app import crud, schemas
 from app.database import get_db
-
+from app import models
+from app.auth import get_current_user
 
 router = APIRouter(
     prefix="/requests",
@@ -19,11 +20,13 @@ router = APIRouter(
 def create_request(
     request_data: schemas.RequestCreate,
     db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
 ):
     return crud.create_request(
         db,
         request_data,
-    )
+        current_user.username,
+        )
 
 
 @router.get(
@@ -65,6 +68,9 @@ def get_request(
 def cancel_request(
     request_id: int,
     db: Session = Depends(get_db),
+    current_user: models.User = Depends(
+        get_current_user
+        )
 ):
     db_request = crud.get_request(
         db,
@@ -75,6 +81,15 @@ def cancel_request(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Request not found",
+        )
+
+    if (
+        db_request.applicant_name != current_user.username
+        and current_user.role != "admin"
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You cannot cancel another user's request",
         )
 
     if db_request.status != "pending":

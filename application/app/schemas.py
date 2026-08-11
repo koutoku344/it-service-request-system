@@ -16,11 +16,6 @@ class RequestCreate(BaseModel):
         min_length=1,
         max_length=2000,
     )
-    applicant_name: str = Field(
-        min_length=1,
-        max_length=100,
-    )
-
 
 class RequestResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -36,11 +31,6 @@ class RequestResponse(BaseModel):
 
 
 class ApprovalAction(BaseModel):
-    approver_name: str = Field(
-        min_length=1,
-        max_length=100,
-    )
-
     comment: str | None = Field(
         default=None,
         max_length=1000,
@@ -56,3 +46,21 @@ class ApprovalHistoryResponse(BaseModel):
     comment: str | None
     approver_name: str
     created_at: datetime
+
+class LoginRequest(BaseModel):
+    username: str = Field(min_length=1, max_length=100)
+    password: str = Field(min_length=1, max_length=200)
+
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class UserResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    username: str
+    role: str
+    is_active: bool

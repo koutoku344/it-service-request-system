@@ -2,8 +2,9 @@ from fastapi import FastAPI
 from sqlalchemy import text
 
 from app.database import engine
-
 from app.routers import approvals, requests
+from app.routers import admin, approvals, auth, requests
+
 
 app = FastAPI(
     title="IT Service Request System API",
@@ -16,6 +17,14 @@ app.include_router(
 
 app.include_router(
     approvals.router,
+)
+
+app.include_router(
+        auth.router
+)
+
+app.include_router(
+        admin.router
 )
 
 @app.get("/")
