@@ -64,3 +64,39 @@ class UserResponse(BaseModel):
     username: str
     role: str
     is_active: bool
+
+class UserCreate(BaseModel):
+    username: str = Field(min_length=3, max_length=100)
+    password: str = Field(min_length=8, max_length=200)
+    role: str = Field(default="user", pattern="^(user|approver|admin)$")
+
+
+class UserRoleUpdate(BaseModel):
+    role: str = Field(pattern="^(user|approver|admin)$")
+
+class UserActiveUpdate(BaseModel):
+    is_active: bool
+
+class RequestTypeCreate(BaseModel):
+    code: str = Field(
+        min_length=1,
+        max_length=50,
+        pattern="^[a-z0-9_]+$",
+    )
+    name: str = Field(min_length=1, max_length=100)
+
+
+class RequestTypeUpdate(BaseModel):
+    name: str = Field(min_length=1, max_length=100)
+    is_active: bool
+
+
+class RequestTypeResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+    code: str
+    name: str
+    is_active: bool
+
+
+

@@ -20,14 +20,30 @@ router = APIRouter(
 def create_request(
     request_data: schemas.RequestCreate,
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user)
+    current_user: models.User = Depends(get_current_user),
 ):
+    request_type_master = crud.get_request_type_by_code(
+        db,
+        request_data.request_type,
+    )
+
+    if request_type_master is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid request type",
+        )
+
+    if not request_type_master.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Request type is inactive",
+        )
+
     return crud.create_request(
         db,
         request_data,
         current_user.username,
-        )
-
+    )
 
 @router.get(
     "",
