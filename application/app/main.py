@@ -2,8 +2,7 @@ from fastapi import FastAPI
 from sqlalchemy import text
 
 from app.database import engine
-from app.routers import approvals, requests
-from app.routers import admin, approvals, auth, requests
+from app.routers import admin, approvals, auth, masters, requests
 
 
 app = FastAPI(
@@ -26,6 +25,11 @@ app.include_router(
 app.include_router(
         admin.router
 )
+
+app.include_router(
+        masters.router
+)
+
 
 @app.get("/")
 def root():
