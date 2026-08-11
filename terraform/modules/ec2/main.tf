@@ -9,6 +9,7 @@ resource "aws_instance" "application" {
   vpc_security_group_ids      = [var.security_group_id]
   key_name                    = var.key_name
   associate_public_ip_address = true
+  iam_instance_profile        = var.iam_instance_profile
 
   user_data = file("${path.module}/user_data.sh")
 
