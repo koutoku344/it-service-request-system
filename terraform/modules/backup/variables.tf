@@ -1,5 +1,5 @@
-variable "name_prefix" {
-  description = "Name prefix for IAM resources"
+variable "bucket_name" {
+  description = "PostgreSQL backup bucket name"
   type        = string
 }
 
@@ -7,8 +7,4 @@ variable "common_tags" {
   description = "Common tags"
   type        = map(string)
   default     = {}
-}
-
-variable "backup_bucket_arn" {
-  type = string
 }

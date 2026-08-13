@@ -42,3 +42,7 @@ output "ec2_public_dns" {
   description = "Application EC2 public DNS name"
   value       = module.ec2.public_dns
 }
+
+output "backup_bucket_name" {
+  value = module.backup.bucket_name
+}
