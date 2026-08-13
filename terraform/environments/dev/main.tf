@@ -38,6 +38,15 @@ module "cloudwatch" {
 module "iam" {
   source = "../../modules/iam"
 
-  name_prefix = local.name_prefix
+  name_prefix       = local.name_prefix
+  common_tags       = local.common_tags
+  backup_bucket_arn = module.backup.bucket_arn
+}
+
+module "backup" {
+  source = "../../modules/backup"
+
+  bucket_name = "it-service-request-system-dev-backup-006635110954"
+
   common_tags = local.common_tags
 }

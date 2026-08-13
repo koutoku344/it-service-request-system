@@ -1,9 +1,9 @@
 #####################################################################
-##Role attached to AWS IAM Service on AWS side (assum"ed" side)??
+## EC2 IAM Role
 #####################################################################
 
-resource "aws_iam_role" "ec2_cloudwatch" {
-  name = "${var.name_prefix}-ec2-cloudwatch-role"
+resource "aws_iam_role" "ec2" {
+  name = "${var.name_prefix}-ec2-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -24,24 +24,62 @@ resource "aws_iam_role" "ec2_cloudwatch" {
   tags = var.common_tags
 }
 
-#####################################################################
-##not need assume side role (due to service role)
-#####################################################################
-
 
 #####################################################################
-##Role attached to cloud watch agent
+## CloudWatch Agent Policy
 #####################################################################
 
 resource "aws_iam_role_policy_attachment" "cloudwatch_agent" {
-  role       = aws_iam_role.ec2_cloudwatch.name
+  role       = aws_iam_role.ec2.name
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
 
+
 #####################################################################
-##Role attached to ec2-instance-profile
+## S3 Backup Policy
 #####################################################################
-resource "aws_iam_instance_profile" "ec2_cloudwatch" {
-  name = "${var.name_prefix}-ec2-cloudwatch-profile"
-  role = aws_iam_role.ec2_cloudwatch.name
+
+resource "aws_iam_role_policy" "s3_backup" {
+  name = "${var.name_prefix}-s3-backup"
+  role = aws_iam_role.ec2.name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+
+    Statement = [
+      {
+        Effect = "Allow"
+
+        Action = [
+          "s3:ListBucket"
+        ]
+
+        Resource = [
+          var.backup_bucket_arn
+        ]
+      },
+      {
+        Effect = "Allow"
+
+        Action = [
+          "s3:PutObject",
+          "s3:GetObject"
+        ]
+
+        Resource = [
+          "${var.backup_bucket_arn}/postgresql/*"
+        ]
+      }
+    ]
+  })
+}
+
+
+#####################################################################
+## EC2 Instance Profile
+#####################################################################
+
+resource "aws_iam_instance_profile" "ec2" {
+  name = "${var.name_prefix}-ec2-profile"
+  role = aws_iam_role.ec2.name
 }
