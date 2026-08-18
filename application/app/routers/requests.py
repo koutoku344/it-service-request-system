@@ -45,13 +45,15 @@ def create_request(
         current_user.username,
     )
 
-@router.get(
-    "",
-    response_model=list[schemas.RequestResponse],
-)
-def list_requests(
-    db: Session = Depends(get_db),
-):
+
+@router.get( 
+    ““, 
+    response_model=list[schemas.RequestResponse], 
+) 
+def list_requests( 
+    db: Session = Depends(get_db), 
+    current_user: models.User= Depends(get_current_user), 
+): 
     return crud.get_requests(db)
 
 
@@ -59,10 +61,12 @@ def list_requests(
     "/{request_id}",
     response_model=schemas.RequestResponse,
 )
-def get_request(
-    request_id: int,
+def get_request( 
+    request_id: int, 
     db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user), 
 ):
+
     db_request = crud.get_request(
         db,
         request_id,
