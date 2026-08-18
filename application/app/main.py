@@ -30,6 +30,9 @@ app.include_router(
         masters.router
 )
 
+app.include_router( 
+    masters.request_types_router
+)
 
 @app.get("/")
 def root():

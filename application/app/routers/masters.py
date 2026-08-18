@@ -2,12 +2,30 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app import crud, models, schemas
-from app.auth import require_roles
+from app.auth import get_current_user, require_roles
 from app.database import get_db
 
 
 router = APIRouter(prefix="/admin/masters", tags=["master-management"])
 
+request_types_router = APIRouter( 
+    prefix=“/request-types”,
+    tags=[“request-types”], 
+    )
+
+@request_types_router.get(
+    "",
+    response_model=list[schemas.RequestTypeResponse],
+)
+def list_available_request_types(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    return [
+        request_type
+        for request_type in crud.get_request_types(db)
+        if request_type.is_active
+    ]
 
 @router.get(
     "/request-types",

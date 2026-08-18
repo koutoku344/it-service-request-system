@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from app import crud, schemas
 from app.database import get_db
 from app import models
-from app.auth import require_roles
+from app.auth import get_current_user, require_roles
 
 
 router = APIRouter(
@@ -84,9 +84,10 @@ def reject_request(
     "/{request_id}/approval-history",
     response_model=list[schemas.ApprovalHistoryResponse],
 )
-def list_approval_history(
-    request_id: int,
-    db: Session = Depends(get_db),
+def list_approval_history( 
+    request_id: int, 
+    db: Session = Depends(get_db), 
+    current_user: models.User = Depends(get_current_user),
 ):
     db_request = crud.get_request(db, request_id)
 
