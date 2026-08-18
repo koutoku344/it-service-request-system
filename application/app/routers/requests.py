@@ -47,7 +47,7 @@ def create_request(
 
 
 @router.get( 
-    ““, 
+    "", 
     response_model=list[schemas.RequestResponse], 
 ) 
 def list_requests( 

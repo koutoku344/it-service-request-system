@@ -9,8 +9,8 @@ from app.database import get_db
 router = APIRouter(prefix="/admin/masters", tags=["master-management"])
 
 request_types_router = APIRouter( 
-    prefix=“/request-types”,
-    tags=[“request-types”], 
+    prefix="/request-types",
+    tags=["request-types"], 
     )
 
 @request_types_router.get(
