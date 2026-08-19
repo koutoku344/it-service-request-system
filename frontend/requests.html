@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Requests - IT Service Request System</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <main>
+        <h1>IT Service Request System</h1>
+        <p>ログイン成功</p>
+        <p id="current-user"></p>
+
+        <button id="logout-button" type="button">
+            ログアウト
+        </button>
+    </main>
+
+    <script>
+        const token = sessionStorage.getItem("access_token");
+        const currentUserText =
+            sessionStorage.getItem("current_user");
+
+        if (!token || !currentUserText) {
+            window.location.href = "/login.html";
+        } else {
+            const currentUser = JSON.parse(currentUserText);
+
+            document.getElementById("current-user").textContent =
+                `ユーザー: ${currentUser.username} / ロール: ${currentUser.role}`;
+        }
+
+        document
+            .getElementById("logout-button")
+            .addEventListener("click", () => {
+                sessionStorage.removeItem("access_token");
+                sessionStorage.removeItem("current_user");
+                window.location.href = "/login.html";
+            });
+    </script>
+</body>
+</html>
