@@ -205,3 +205,28 @@ button {
 .form-actions button {
     width: auto;
 }
+
+.detail-card,
+.history-section {
+    margin-bottom: 24px;
+    padding: 24px;
+    background: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 6px;
+}
+
+.detail-list {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 12px 20px;
+    margin: 0;
+}
+
+.detail-list dt {
+    font-weight: bold;
+}
+
+.detail-list dd {
+    margin: 0;
+    white-space: pre-wrap;
+}

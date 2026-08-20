@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>申請詳細 - IT Service Request System</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="app-header">
+        <h1>IT Service Request System</h1>
+        <div class="user-info">
+            <span>ユーザー: <strong id="current-user-name"></strong></span>
+            <span>ロール: <strong id="current-user-role"></strong></span>
+            <button id="logout-button" type="button">ログアウト</button>
+        </div>
+    </header>
+
+    <div class="app-layout">
+        <nav class="side-menu">
+            <a href="/requests.html">申請一覧</a>
+            <a href="/request-new.html">新規申請</a>
+            <a id="approval-menu" href="/approvals.html" hidden>承認</a>
+            <div id="admin-menu" hidden>
+                <a href="/admin-users.html">ユーザー管理</a>
+                <a href="/admin-request-types.html">申請種別管理</a>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <h2>申請詳細</h2>
+            <p id="detail-error" class="error-message" aria-live="polite"></p>
+
+            <section class="detail-card">
+                <dl class="detail-list">
+                    <dt>申請ID</dt>
+                    <dd id="request-id"></dd>
+
+                    <dt>申請種別</dt>
+                    <dd id="request-type"></dd>
+
+                    <dt>タイトル</dt>
+                    <dd id="request-title"></dd>
+
+                    <dt>説明</dt>
+                    <dd id="request-description"></dd>
+
+                    <dt>申請者</dt>
+                    <dd id="request-applicant"></dd>
+
+                    <dt>状態</dt>
+                    <dd id="request-status"></dd>
+
+                    <dt>申請日時</dt>
+                    <dd id="request-created-at"></dd>
+
+                    <dt>更新日時</dt>
+                    <dd id="request-updated-at"></dd>
+                </dl>
+
+                <div class="form-actions">
+                    <button id="cancel-request-button" type="button">
+                        申請を取り消す
+                    </button>
+                    <a href="/requests.html">申請一覧へ戻る</a>
+                </div>
+            </section>
+
+            <section class="history-section">
+                <h2>承認履歴</h2>
+
+                <p>
+                    申請ID:
+                    <strong id="history-request-id"></strong>
+                </p>
+
+                <p id="history-empty" hidden>
+                    承認履歴はありません。
+                </p>
+
+                <div class="table-container">
+                    <table class="requests-table">
+                        <thead>
+                            <tr>
+                                <th>操作</th>
+                                <th>コメント</th>
+                                <th>承認者</th>
+                                <th>操作日時</th>
+                            </tr>
+                        </thead>
+                        <tbody id="approval-history-body"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/request-detail.js"></script>
+</body>
+</html>
