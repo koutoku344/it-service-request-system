@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新規申請 - IT Service Request System</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="app-header">
+        <h1>IT Service Request System</h1>
+        <div class="user-info">
+            <span>ユーザー: <strong id="current-user-name"></strong></span>
+            <span>ロール: <strong id="current-user-role"></strong></span>
+            <button id="logout-button" type="button">ログアウト</button>
+        </div>
+    </header>
+
+    <div class="app-layout">
+        <nav class="side-menu">
+            <a href="/requests.html">申請一覧</a>
+            <a href="/request-new.html">新規申請</a>
+            <a id="approval-menu" href="/approvals.html" hidden>承認</a>
+            <div id="admin-menu" hidden>
+                <a href="/admin-users.html">ユーザー管理</a>
+                <a href="/admin-request-types.html">申請種別管理</a>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <h2>新規申請</h2>
+            <p id="request-error" class="error-message" aria-live="polite"></p>
+
+            <form id="request-form" class="request-form">
+                <div class="form-group">
+                    <label for="request-type">申請種別</label>
+                    <select id="request-type" required>
+                        <option value="">選択してください</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="title">タイトル</label>
+                    <input type="text" id="title" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">説明</label>
+                    <textarea id="description" rows="8" required></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit">申請する</button>
+                    <a href="/requests.html">キャンセル</a>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/request-new.js"></script>
+</body>
+</html>

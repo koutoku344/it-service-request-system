@@ -172,3 +172,36 @@ button {
 [hidden] {
     display: none !important;
 }
+
+.request-form {
+    max-width: 720px;
+    padding: 24px;
+    background: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 6px;
+}
+
+.request-form select,
+.request-form input,
+.request-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #aaaaaa;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.request-form textarea {
+    resize: vertical;
+}
+
+.form-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.form-actions button {
+    width: auto;
+}
