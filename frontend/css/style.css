@@ -230,3 +230,25 @@ button {
     margin: 0;
     white-space: pre-wrap;
 }
+
+.approval-comment {
+    min-width: 180px;
+    padding: 8px;
+    border: 1px solid #aaaaaa;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+.approval-actions {
+    min-width: 170px;
+}
+
+.approval-actions a,
+.approval-actions button {
+    display: inline-block;
+    margin: 4px;
+}
+
+.success-message {
+    color: #166534;
+}

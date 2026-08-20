@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>承認 - IT Service Request System</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="app-header">
+        <h1>IT Service Request System</h1>
+
+        <div class="user-info">
+            <span>
+                ユーザー:
+                <strong id="current-user-name"></strong>
+            </span>
+
+            <span>
+                ロール:
+                <strong id="current-user-role"></strong>
+            </span>
+
+            <button id="logout-button" type="button">
+                ログアウト
+            </button>
+        </div>
+    </header>
+
+    <div class="app-layout">
+        <nav class="side-menu">
+            <a href="/requests.html">申請一覧</a>
+            <a href="/request-new.html">新規申請</a>
+            <a href="/approvals.html">承認</a>
+
+            <div id="admin-menu" hidden>
+                <a href="/admin-users.html">
+                    ユーザー管理
+                </a>
+
+                <a href="/admin-request-types.html">
+                    申請種別管理
+                </a>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h2>承認</h2>
+            </div>
+
+            <p
+                id="approval-error"
+                class="error-message"
+                aria-live="polite"
+            ></p>
+
+            <p
+                id="approval-success"
+                class="success-message"
+                aria-live="polite"
+            ></p>
+
+            <p id="approval-empty" hidden>
+                承認待ちの申請はありません。
+            </p>
+
+            <div class="table-container">
+                <table class="requests-table">
+                    <thead>
+                        <tr>
+                            <th>申請ID</th>
+                            <th>申請種別</th>
+                            <th>タイトル</th>
+                            <th>申請者</th>
+                            <th>状態</th>
+                            <th>申請日時</th>
+                            <th>コメント</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="approval-table-body">
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/approvals.js"></script>
+</body>
+</html>
