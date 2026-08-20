@@ -19,6 +19,8 @@ async function apiRequest(path, options = {}) {
     if (response.status === 401) {
         sessionStorage.removeItem("access_token");
         sessionStorage.removeItem("current_user");
+        window.location.href = "/login.html";
+        throw new Error("Unauthorized");
     }
 
     return response;

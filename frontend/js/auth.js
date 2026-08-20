@@ -62,3 +62,9 @@ if (loginForm) {
         }
     });
 }
+
+function logout() {
+    sessionStorage.removeItem("access_token");
+    sessionStorage.removeItem("current_user");
+    window.location.href = "/login.html";
+}
