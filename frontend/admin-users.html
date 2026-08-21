@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ユーザー管理 - IT Service Request System</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="app-header">
+        <h1>IT Service Request System</h1>
+
+        <div class="user-info">
+            <span>
+                ユーザー:
+                <strong id="current-user-name"></strong>
+            </span>
+
+            <span>
+                ロール:
+                <strong id="current-user-role"></strong>
+            </span>
+
+            <button id="logout-button" type="button">
+                ログアウト
+            </button>
+        </div>
+    </header>
+
+    <div class="app-layout">
+        <nav class="side-menu">
+            <a href="/requests.html">申請一覧</a>
+            <a href="/request-new.html">新規申請</a>
+            <a href="/approvals.html">承認</a>
+            <a href="/admin-users.html">ユーザー管理</a>
+            <a href="/admin-request-types.html">申請種別管理</a>
+        </nav>
+
+        <main class="main-content">
+            <h2>ユーザー管理</h2>
+
+            <p
+                id="user-admin-error"
+                class="error-message"
+                aria-live="polite"
+            ></p>
+
+            <p
+                id="user-admin-success"
+                class="success-message"
+                aria-live="polite"
+            ></p>
+
+            <section class="detail-card">
+                <h3>ユーザー登録</h3>
+
+                <form id="user-create-form">
+                    <div class="form-group">
+                        <label for="new-username">ユーザー名</label>
+                        <input
+                            id="new-username"
+                            type="text"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="new-password">パスワード</label>
+                        <input
+                            id="new-password"
+                            type="password"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="new-role">ロール</label>
+                        <select id="new-role">
+                            <option value="user">user</option>
+                            <option value="approver">approver</option>
+                            <option value="admin">admin</option>
+                        </select>
+                    </div>
+
+                    <button type="submit">
+                        登録
+                    </button>
+                </form>
+            </section>
+
+            <section class="detail-card">
+                <h3>ユーザー一覧</h3>
+
+                <div class="table-container">
+                    <table class="requests-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>ユーザー名</th>
+                                <th>ロール</th>
+                                <th>有効状態</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="users-table-body"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/admin-users.js"></script>
+</body>
+</html>

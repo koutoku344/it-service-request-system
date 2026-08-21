@@ -252,3 +252,20 @@ button {
 .success-message {
     color: #166534;
 }
+
+.detail-card form {
+    max-width: 640px;
+}
+
+.detail-card select,
+.detail-card input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #aaaaaa;
+    border-radius: 4px;
+}
+
+.requests-table button {
+    width: auto;
+    margin: 2px;
+}
