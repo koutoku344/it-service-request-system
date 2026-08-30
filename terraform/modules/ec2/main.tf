@@ -1,17 +1,14 @@
-locals {
-  name_prefix = "${var.system_name}-${var.environment}"
-}
-
 resource "aws_instance" "application" {
   ami                         = var.ami_id
   instance_type               = var.instance_type
   subnet_id                   = var.subnet_id
   vpc_security_group_ids      = [var.security_group_id]
   key_name                    = var.key_name
-  associate_public_ip_address = true
   iam_instance_profile        = var.iam_instance_profile
 
-  user_data = file("${path.module}/user_data.sh")
+  user_data = templatefile("${path.module}/user_data.sh", {
+    hostname = var.hostname
+  })
 
   metadata_options {
     http_endpoint = "enabled"
@@ -26,6 +23,6 @@ resource "aws_instance" "application" {
   }
 
   tags = merge(var.common_tags, {
-    Name = "${local.name_prefix}-app-ec2"
+    Name = var.instance_name
   })
 }

@@ -3,9 +3,12 @@ output "vpc_id" {
   value       = module.network.vpc_id
 }
 
-output "public_subnet_id" {
-  description = "ID of the dev public subnet"
-  value       = module.network.public_subnet_id
+output "public_subnet_a_id" {
+  value = module.network.public_subnet_a_id
+}
+
+output "public_subnet_c_id" {
+  value = module.network.public_subnet_c_id
 }
 
 output "internet_gateway_id" {
@@ -18,9 +21,45 @@ output "public_route_table_id" {
   value       = module.network.public_route_table_id
 }
 
-output "ec2_security_group_id" {
-  description = "ID of the dev EC2 security group"
-  value       = module.network.ec2_security_group_id
+output "legacy_ec2_security_group_id" {
+  description = "ID of the legacy dev EC2 security group"
+  value       = module.network.legacy_ec2_security_group_id
+}
+
+output "alb_security_group_id" {
+  value = module.network.alb_security_group_id
+}
+
+output "web_security_group_id" {
+  value = module.network.web_security_group_id
+}
+
+output "db_security_group_id" {
+  value = module.network.db_security_group_id
+}
+
+output "web_c_instance_id" {
+  value = module.web_c.instance_id
+}
+
+output "web_c_private_ip" {
+  value = module.web_c.private_ip
+}
+
+output "web_c_public_ip" {
+  value = module.web_c.public_ip
+}
+
+output "db_c_instance_id" {
+  value = module.db_c.instance_id
+}
+
+output "db_c_private_ip" {
+  value = module.db_c.private_ip
+}
+
+output "db_c_public_ip" {
+  value = module.db_c.public_ip
 }
 
 output "ec2_instance_id" {

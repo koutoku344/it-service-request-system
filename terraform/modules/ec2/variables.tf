@@ -49,3 +49,12 @@ variable "iam_instance_profile" {
   type        = string
   default     = null
 }
+variable "instance_name" {
+  description = "Name tag for the EC2 instance"
+  type        = string
+}
+
+variable "hostname" {
+  description = "Linux hostname"
+  type        = string
+}

@@ -130,6 +130,46 @@ Web系とDatabase系を分離する主目的は、PostgreSQLのSplit Brain対策
 
 単一Web EC2障害、単一Database EC2障害または単一AZ障害によってシステム全体が停止しない構成とする。
 
+### 4.3 Subnet配置方針
+
+STEP2では、1AZあたり1つのPublic Subnetを配置し、2AZ合計で2つのSubnetを使用する。
+
+| 論理AZ | AWS Availability Zone | Subnet | CIDR | 主な配置Resource |
+|---|---|---|---|---|
+| AZ-A | `ap-northeast-1a` | `it-service-request-system-dev-public-subnet-a` | `10.0.1.0/24` | ALB、Web-A、DB-A |
+| AZ-B | `ap-northeast-1b` | `it-service-request-system-dev-public-subnet-b` | `10.0.2.0/24` | ALB、Web-B、DB-B |
+
+一般的な3層Architectureでは、Internet-facing ALBをPublic Subnet、Web / ApplicationをPrivate Subnet、DatabaseをPrivate Subnetへ分離し、AZごとに各LayerのSubnetを配置する方式が考えられる。この場合、2AZ構成ではPublic / Web / Databaseの3 Layer × 2AZとなり、6 Subnet構成となる。
+
+本STEPでは、このLayer単位のSubnet分割は採用せず、AZ単位の2 Public Subnet構成とする。
+
+理由は以下とする。
+
+- Private Subnet上のWeb EC2 / Database EC2から、OS Package Repository、Docker Image Repository、GitHub等のInternet上の外部ServiceへOutbound通信する場合、NAT Gateway等のInternet接続経路が必要となる
+- NAT Gatewayは通信量に応じたData Processing料金だけでなく、Provisioningされ利用可能な時間に対する時間料金が発生するため、通信量が少ない場合でも固定的なCostが発生する
+- Multi-AZでAZ障害時にも各AZから独立してOutbound通信可能とする一般的な構成では、AZごとにNAT Gatewayを配置することが望ましく、2AZでは2台分の時間料金が継続的に発生する
+- AWS Free Tier CreditやPromotional Creditが適用可能なAccountでは、NAT Gateway利用料金がCreditから相殺され、実際の支払額が小さくなる場合がある。ただしCreditはAccount、Plan、残高、有効期限に依存する一時的なものであり、Architectureの恒久的なCost前提には含めない
+- 本STEPでは「有料プランは原則として利用しない」という要件を優先し、追加の常時課金Resourceを増やさずにMulti-AZ / Failoverの学習・検証を行う
+
+Public Subnetへ配置することは、各EC2をInternetへ無制限に公開することを意味しない。Security Groupにより、Web EC2のHTTP通信はALB-SGからのみ、Database EC2のPostgreSQL通信はWEB-EC2-SGおよびDB-EC2-SGからのみ許可する。Application用PortおよびPostgreSQL PortはInternetから直接接続できないよう制御する。
+
+将来、Cost制約が緩和される場合、または本番運用を想定してNetwork Layerでの分離を強化する場合は、以下の6 Subnet構成への変更を再評価する。
+
+```text
+AZ-A
+├─ Public Subnet-A   : ALB
+├─ Web Subnet-A      : Nginx / Application
+└─ DB Subnet-A       : PostgreSQL
+
+AZ-B
+├─ Public Subnet-B   : ALB
+├─ Web Subnet-B      : Nginx / Application
+└─ DB Subnet-B       : PostgreSQL
+```
+
+この場合、Private Subnetから必要なOutbound通信について、NAT Gateway、VPC Endpoint、NAT Instance等をCost・可用性・運用負荷の観点で比較して決定する。
+
+
 ## 5. Application可用性アーキテクチャ
 
 ### 5.1 可用性方式比較
@@ -428,6 +468,8 @@ DB Primary ×                   DB Standby
 これはシステム全体を一括してSite Failoverする方式ではなく、各コンポーネントが個別のFailover方式に従った結果、正常AZへ処理が集約される構成とする。
 
 ## 9. Networkアーキテクチャ
+
+STEP2のSubnet構成は「4.3 Subnet配置方針」に従い、AZ-A / AZ-Bそれぞれに1つのPublic Subnetを配置する2 Subnet構成とする。Web / DatabaseをLayer単位のPrivate Subnetへ分割しない理由は、NAT Gateway等の追加常時Costを避けるためである。
 
 ### 9.1 Network要件
 

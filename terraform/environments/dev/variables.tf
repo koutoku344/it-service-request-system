@@ -32,16 +32,28 @@ variable "vpc_cidr" {
   default     = "10.0.0.0/16"
 }
 
-variable "public_subnet_cidr" {
-  description = "CIDR block of the dev public subnet"
+variable "public_subnet_a_cidr" {
+  description = "CIDR block of the dev public subnet in AZ-A"
   type        = string
   default     = "10.0.1.0/24"
 }
 
-variable "availability_zone" {
-  description = "Availability Zone used by the dev environment"
+variable "public_subnet_c_cidr" {
+  description = "CIDR block of the dev public subnet in AZ-C"
+  type        = string
+  default     = "10.0.2.0/24"
+}
+
+variable "availability_zone_a" {
+  description = "Availability Zone A"
   type        = string
   default     = "ap-northeast-1a"
+}
+
+variable "availability_zone_c" {
+  description = "Availability Zone for AZ-C"
+  type        = string
+  default     = "ap-northeast-1c"
 }
 
 variable "allowed_ipv4_cidr" {

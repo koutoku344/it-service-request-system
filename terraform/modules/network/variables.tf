@@ -13,18 +13,28 @@ variable "vpc_cidr" {
   type        = string
 }
 
-variable "public_subnet_cidr" {
-  description = "CIDR block of the public subnet"
+variable "public_subnet_a_cidr" {
+  description = "CIDR block of the public subnet in AZ-A"
   type        = string
 }
 
-variable "availability_zone" {
-  description = "Availability Zone used by the public subnet"
+variable "public_subnet_c_cidr" {
+  description = "CIDR block of the public subnet in AZ-C"
+  type        = string
+}
+
+variable "availability_zone_a" {
+  description = "Availability Zone A"
+  type        = string
+}
+
+variable "availability_zone_c" {
+  description = "Availability Zone C"
   type        = string
 }
 
 variable "allowed_ipv4_cidr" {
-  description = "IPv4 CIDR allowed to access HTTP, HTTPS and SSH"
+  description = "Administrator/client IPv4 CIDR"
   type        = string
 }
 
