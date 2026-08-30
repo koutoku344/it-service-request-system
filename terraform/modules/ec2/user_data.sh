@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euxo pipefail
 
+hostnamectl set-hostname "${hostname}"
+
 dnf update -y
 dnf install -y docker
 
@@ -13,7 +15,7 @@ mkdir -p /usr/local/lib/docker/cli-plugins
 
 COMPOSE_VERSION="v2.39.1"
 
-curl -SL   "https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-linux-x86_64"   -o /usr/local/lib/docker/cli-plugins/docker-compose
+curl -SL   "https://github.com/docker/compose/releases/download/$${COMPOSE_VERSION}/docker-compose-linux-x86_64"   -o /usr/local/lib/docker/cli-plugins/docker-compose
 
 chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
 

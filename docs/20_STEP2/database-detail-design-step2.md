@@ -742,6 +742,33 @@ Application接続はWeb EC2-A / Web EC2-BからDB EC2-C / DB EC2-DへのTCP/5432
 
 Replication通信はDB EC2-C / DB EC2-D間のTCP/5432のみ許可する。
 
+Database EC2は、アーキテクチャ設計書 STEP2で定義したAZ単位のPublic Subnetへ配置する。
+
+| Database EC2 | AWS Availability Zone | Subnet | CIDR |
+|---|---|---|---|
+| DB-A | `ap-northeast-1a` | `it-service-request-system-dev-public-subnet-a` | `10.0.1.0/24` |
+| DB-B | `ap-northeast-1b` | `it-service-request-system-dev-public-subnet-b` | `10.0.2.0/24` |
+
+Databaseを専用Private Subnetへ分離する構成は、Network LayerでInternet経路を分離できるため、一般的なProduction Architectureでは有力な選択肢である。
+
+ただし、本STEPではWeb / Database EC2からOS Package Repository、Docker Image Repository、GitHub等へのOutbound通信経路を維持する必要がある。
+
+Private Subnetを採用する場合、典型的にはNAT Gateway等を追加する必要がある。NAT GatewayはData Processing量に応じた料金に加えてProvisioning時間に対する時間料金が発生するため、通信量が少ない場合でもCostが継続する。また、Multi-AZの可用性を維持する場合はAZごとのNAT Gateway配置が望ましく、2AZでは常時Costが増加する。
+
+AWS Free Tier Credit等によってNAT Gateway料金が相殺される場合はあるが、Creditは一時的かつAccount条件に依存するため、本設計では恒久的なCost削減要素として扱わない。
+
+以上より、本STEPでは「有料プランは原則として利用しない」という要件を優先し、DB-A / DB-Bを各AZのPublic Subnetへ配置する。ただし、Public Subnet配置であってもPostgreSQLをInternetへ公開しない。
+
+- TCP/5432のApplication接続はWEB-EC2-SGからのみ許可する
+- TCP/5432のReplication通信はDB-EC2-SG間のみ許可する
+- InternetをSourceとするTCP/5432のInbound Ruleは作成しない
+- PostgreSQLへの接続はPrivate IPを使用する
+- DB EC2間ReplicationもPrivate IPを使用する
+- SSH等の管理通信は管理元CIDRへ限定する
+
+将来、Cost制約が緩和される場合はDatabase専用Private Subnetへの移行を再評価する。
+
+
 ### 17.2 User分離
 
 以下のUserを分離する。
