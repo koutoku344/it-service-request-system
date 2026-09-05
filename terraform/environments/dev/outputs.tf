@@ -30,12 +30,40 @@ output "alb_security_group_id" {
   value = module.network.alb_security_group_id
 }
 
+output "alb_dns_name" {
+  value = module.alb.dns_name
+}
+
 output "web_security_group_id" {
   value = module.network.web_security_group_id
 }
 
 output "db_security_group_id" {
   value = module.network.db_security_group_id
+}
+
+output "web_a_instance_id" {
+  value = module.web_a.instance_id
+}
+
+output "web_a_private_ip" {
+  value = module.web_a.private_ip
+}
+
+output "web_a_public_ip" {
+  value = module.web_a.public_ip
+}
+
+output "db_a_instance_id" {
+  value = module.db_a.instance_id
+}
+
+output "db_a_private_ip" {
+  value = module.db_a.private_ip
+}
+
+output "db_a_public_ip" {
+  value = module.db_a.public_ip
 }
 
 output "web_c_instance_id" {

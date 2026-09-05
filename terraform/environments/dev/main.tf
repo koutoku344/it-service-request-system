@@ -12,6 +12,23 @@ module "network" {
   common_tags          = local.common_tags
 }
 
+module "alb" {
+  source = "../../modules/alb"
+
+  name_prefix = local.alb_name_prefix
+  vpc_id      = module.network.vpc_id
+  subnet_ids = [
+    module.network.public_subnet_a_id,
+    module.network.public_subnet_c_id,
+  ]
+  security_group_id = module.network.alb_security_group_id
+  target_instance_ids = [
+    module.web_a.instance_id,
+    module.web_c.instance_id,
+  ]
+  common_tags = local.common_tags
+}
+
 module "ec2" {
   source = "../../modules/ec2"
 
@@ -27,6 +44,40 @@ module "ec2" {
   iam_instance_profile = module.iam.instance_profile_name
   instance_name        = "${local.name_prefix}-app-ec2"
   hostname             = "app-ec2"
+}
+
+module "web_a" {
+  source = "../../modules/ec2"
+
+  system_name          = var.system_name
+  environment          = var.environment
+  ami_id               = var.ami_id
+  instance_type        = var.instance_type
+  subnet_id            = module.network.public_subnet_a_id
+  security_group_id    = module.network.web_security_group_id
+  key_name             = var.key_name
+  root_volume_size     = var.root_volume_size
+  common_tags          = local.common_tags
+  iam_instance_profile = module.iam.instance_profile_name
+  instance_name        = "${local.name_prefix}-web-a"
+  hostname             = "web-a"
+}
+
+module "db_a" {
+  source = "../../modules/ec2"
+
+  system_name          = var.system_name
+  environment          = var.environment
+  ami_id               = var.ami_id
+  instance_type        = var.instance_type
+  subnet_id            = module.network.public_subnet_a_id
+  security_group_id    = module.network.db_security_group_id
+  key_name             = var.key_name
+  root_volume_size     = var.root_volume_size
+  common_tags          = local.common_tags
+  iam_instance_profile = module.iam.instance_profile_name
+  instance_name        = "${local.name_prefix}-db-a"
+  hostname             = "db-a"
 }
 
 module "web_c" {
@@ -88,3 +139,4 @@ module "backup" {
 
   common_tags = local.common_tags
 }
+
