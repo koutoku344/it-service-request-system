@@ -229,6 +229,24 @@ resource "aws_vpc_security_group_ingress_rule" "https" {
   to_port           = 443
 }
 
+resource "aws_vpc_security_group_ingress_rule" "legacy_postgres_from_web" {
+  security_group_id            = aws_security_group.ec2.id
+  description                  = "Temporary PostgreSQL access from STEP2 Web EC2"
+  referenced_security_group_id = aws_security_group.web.id
+  ip_protocol                  = "tcp"
+  from_port                    = 5432
+  to_port                      = 5432
+}
+
+resource "aws_vpc_security_group_ingress_rule" "legacy_postgres_from_db" {
+  security_group_id            = aws_security_group.ec2.id
+  description                  = "Temporary PostgreSQL replication access from STEP2 DB EC2"
+  referenced_security_group_id = aws_security_group.db.id
+  ip_protocol                  = "tcp"
+  from_port                    = 5432
+  to_port                      = 5432
+}
+
 resource "aws_vpc_security_group_ingress_rule" "ssh" {
   security_group_id = aws_security_group.ec2.id
   description       = "SSH from administrator network"

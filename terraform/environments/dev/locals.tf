@@ -1,5 +1,6 @@
 locals {
-  name_prefix = "${var.system_name}-${var.environment}"
+  name_prefix     = "${var.system_name}-${var.environment}"
+  alb_name_prefix = "srs-${var.environment}"
 
   common_tags = {
     System      = var.system_name
